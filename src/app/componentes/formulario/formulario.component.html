@@ -13,39 +13,48 @@
       <div class="card">
         <div class="card-body">
           <h5 class="titulo">Agregar terjeta</h5>
-          <form>
+          <form [formGroup]="formulario" (ngSubmit)="enviarDatos()">
             <div class="input-group input-group-lg mb-3">
               <span class="input-group-text">
-                <i class="fa-solid fa-id-card"></i>
+                <i class="fa-solid fa-id-card" 
+                [class.green-icon]="this.formulario.get('titular')?.valid"
+                [class.red-icon]="this.formulario.get('titular')?.invalid && this.formulario.get('titular')?.touched"></i>
+                
               </span>
-              <input type="text" class="form-control" placeholder="Titular" />
+              <input formControlName="titular" type="text" class="form-control" placeholder="Titular" />
             </div>
             <div class="input-group input-group-lg mb-3">
                 <span class="input-group-text">
-                    <i class="fa-solid fa-credit-card"></i>
+                    <i class="fa-solid fa-credit-card"
+                    [class.green-icon]="this.formulario.get('numeroTarjeta')?.valid"
+                [class.red-icon]="this.formulario.get('numeroTarjeta')?.invalid && this.formulario.get('numeroTarjeta')?.touched"></i>
                 </span>
-                <input type="text" class="form-control" placeholder="Numero de tarjeta" />
+                <input formControlName="numeroTarjeta" maxlength="16" type="text" class="form-control" placeholder="Numero de tarjeta" />
               </div>
               <div class="row">
                 <div class="col-lg-7">
                     <div class="input-group input-group-lg mb-3">
                         <span class="input-group-text">
-                            <i class="fa-solid fa-calendar-days"></i>
+                            <i class="fa-solid fa-calendar-days"
+                            [class.green-icon]="this.formulario.get('fechaExpiracion')?.valid"
+                [class.red-icon]="this.formulario.get('fechaExpiracion')?.invalid && this.formulario.get('fechaExpiracion')?.touched"></i>
                         </span>
-                        <input type="text" class="form-control" placeholder="Mes/año" />
+                        <input formControlName="fechaExpiracion" maxlength="5" type="text" class="form-control" placeholder="Mes/año" />
                       </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="input-group input-group-lg mb-3">
                         <span class="input-group-text">
-                            <i class="fa-solid fa-key"></i>
+                            <i class="fa-solid fa-key"
+                            [class.green-icon]="this.formulario.get('cvv')?.valid"
+                [class.red-icon]="this.formulario.get('cvv')?.invalid && this.formulario.get('cvv')?.touched"></i>
                         </span>
-                        <input type="password" class="form-control" placeholder="CCV" />
+                        <input formControlName="cvv" maxlength="3" type="password" class="form-control" placeholder="CVV" />
                       </div>
                 </div>
               </div>
               <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-success btn-lg">
+                <button [disabled]="this.formulario.invalid"  type="submit" class="btn btn-success btn-lg">
                     <i class="fa-solid fa-database"></i>&nbsp;Aceptar</button>
               </div>              
           </form>
@@ -58,12 +67,16 @@
           <h5 class="titulo">Listado de tarjetas</h5>
           <table class="table">
             <tbody>
-              <tr *ngFor="let tarejeta of listTarjetas">
+              <tr *ngFor="let tarejeta of listTarjetas; let i =index">
                 <td>{{ tarejeta.titular }}</td>
                 <td>{{ tarejeta.numeroTarjeta }}</td>
                 <td>{{ tarejeta.fechaExpiracion }}</td>
-                <td><i class="far fa-solid fa-pen-to-square text-info"></i></td>
-                <td><i class="far fa-regular fa-trash-can text-danger"></i></td>
+                <td>
+                  <i class="far fa-solid fa-pen-to-square text-info"></i>
+                </td>
+                <td>
+                  <i (click)="eliminarDatos(i)" class="far fa-regular fa-trash-can text-danger"></i>
+                </td>
               </tr>
             </tbody>
           </table>
